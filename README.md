@@ -1,5 +1,5 @@
 # DSL-UI
-Kotlin实现DSL语法，模仿Flutter，JetPack Compose，简单代码布局demo。
+Kotlin实现DSL语法，模仿Flutter，JetPack Compose，简化代码布局demo。
 
     class MainActivity : AppCompatActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
