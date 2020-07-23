@@ -33,19 +33,18 @@ fun Activity.Column(
     block: Column.() -> Unit
 ): View {
     val linearLayout = LinearLayout(this)
-    linearLayout.orientation = orientation
-
-    val layoutParams = (linearLayout.layoutParams ?: ViewGroup.MarginLayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT,
-        ViewGroup.LayoutParams.WRAP_CONTENT
-    )) as ViewGroup.MarginLayoutParams
-
-    layoutParams.leftMargin = leftMargin
-    layoutParams.topMargin = topMargin
-    layoutParams.rightMargin = rightMargin
-    layoutParams.bottomMargin = bottomMargin
-    linearLayout.layoutParams = layoutParams
-    Column(linearLayout).block()
+    Column(linearLayout)
+        .apply {
+            initColumn(
+                linearLayout = linearLayout,
+                orientation = orientation,
+                leftMargin = leftMargin,
+                topMargin = topMargin,
+                rightMargin = rightMargin,
+                bottomMargin = bottomMargin
+            )
+            block()
+        }
     return linearLayout
 }
 
@@ -95,7 +94,30 @@ class Column(private val linearLayout: LinearLayout) {
         layoutGravity: Int = Gravity.START,
         block: Column.() -> Unit
     ) {
+
         val linearLayout = LinearLayout(linearLayout.context)
+        initColumn(
+            linearLayout,
+            orientation,
+            leftMargin,
+            topMargin,
+            rightMargin,
+            bottomMargin,
+            layoutGravity
+        )
+        Column(linearLayout).block()
+        this.linearLayout.addView(linearLayout)
+    }
+
+    fun initColumn(
+        linearLayout: LinearLayout,
+        orientation: Int,
+        leftMargin: Int = 0,
+        topMargin: Int = 0,
+        rightMargin: Int = 0,
+        bottomMargin: Int = 0,
+        layoutGravity: Int = Gravity.START
+    ) {
         linearLayout.orientation = orientation
 
         val layoutParams = LinearLayout.LayoutParams(
@@ -109,9 +131,6 @@ class Column(private val linearLayout: LinearLayout) {
         layoutParams.bottomMargin = bottomMargin
         layoutParams.gravity = layoutGravity
         linearLayout.layoutParams = layoutParams
-
-        Column(linearLayout).block()
-        this.linearLayout.addView(linearLayout)
     }
 
 }
